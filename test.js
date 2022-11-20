@@ -25,12 +25,16 @@ async function writePNG(canvas, name) {
   await events.once(out, 'finish');
 }
 
-const reuseCanvas = createCanvas(ICON_SIZE, ICON_SIZE);
-for (let id = 0; id < 4; ++id) {
-  hashIcon(reuseCanvas, `actual-${id}`, `${id}.png`);
+async function runTests() {
+  const reuseCanvas = createCanvas(ICON_SIZE, ICON_SIZE);
+  for (let id = 0; id < 4; ++id) {
+    await hashIcon(reuseCanvas, `actual-${id}`, `${id}.png`);
+  }
+
+  for (let id = 0; id < 4; ++id) {
+    const uniqueCanvas = createCanvas(ICON_SIZE, ICON_SIZE);
+    await hashIcon(uniqueCanvas, `expected-${id}`, `${id}.png`);
+  }
 }
 
-for (let id = 0; id < 4; ++id) {
-  const uniqueCanvas = createCanvas(ICON_SIZE, ICON_SIZE);
-  hashIcon(uniqueCanvas, `expected-${id}`, `${id}.png`);
-}
+runTests();
